@@ -12,12 +12,13 @@ public class MainServer extends Application {
     public void start(Stage primaryStage) throws Exception{
         FXMLLoader loader = new FXMLLoader(getClass().getResource("sampleServer.fxml"));
         Parent root = loader.load();
-        primaryStage.setTitle("Hello World");
+        primaryStage.setTitle("Server");
         primaryStage.setScene(new Scene(root, 800, 275));
         primaryStage.setResizable(false);
         primaryStage.show();
 
-        new ServerSocketPart(loader.getController());
+        ServerSocketPart serverSocket = new ServerSocketPart(loader.getController());
+        serverSocket.start();
     }
 
 

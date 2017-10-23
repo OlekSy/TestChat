@@ -10,11 +10,15 @@ public class MainClient extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("sampleClient.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("sampleClient.fxml"));
+        Parent root = loader.load();
         primaryStage.setTitle("Client");
         primaryStage.setScene(new Scene(root, 600, 400));
         primaryStage.setResizable(false);
         primaryStage.show();
+
+        ClientSocketPart clientSocket = new ClientSocketPart(loader.getController());
+        clientSocket.start();
     }
 
 

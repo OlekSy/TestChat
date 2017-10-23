@@ -9,32 +9,43 @@ import java.net.Socket;
 /**
  * Created by damaz on 22.10.2017.
  */
-public class ServerSocketPart {
+public class ServerSocketPart extends Thread {
+    ControllerServer controller;
 
     public static final int PORT = 8080;
 
     public ServerSocketPart(ControllerServer controller) throws IOException{
-        ServerSocket serverSocket = new ServerSocket(PORT);
-        System.out.println("Started: " + serverSocket);
-        controller.consoleServerOutput("Started: " + serverSocket);
+        this.controller = controller;
+    }
+
+    @Override
+    public void run(){
+        ServerSocket serverSocket;
         try {
-            Socket socket = serverSocket.accept();
+            serverSocket = new ServerSocket(PORT);
+            controller.consoleServerOutput("Started: " + serverSocket);
             try {
-                //serverOutput.appendText("Connection accepted: " + socket);
-                BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
-                while (true) {
-                    String str = in.readLine();
-                    if (str.equals("END")) break;
-                    //serverOutput.appendText("Echoing: " + str);
-                    out.println(str);
+                Socket socket = serverSocket.accept();
+                try {
+                    controller.consoleServerOutput("Connection accepted: " + socket);
+                    BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                    PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
+                    String str;
+                    while (true) {
+                        str = in.readLine();
+                        if (str.equals("END")) break;
+                        controller.consoleServerOutput("Echoing: " + str);
+                        out.println(str);
+                    }
+                } finally {
+                    controller.consoleServerOutput("Closing...");
+                    socket.close();
                 }
             } finally {
-                //serverOutput.appendText("Closing...");
-                socket.close();
+                serverSocket.close();
             }
-        } finally {
-            serverSocket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

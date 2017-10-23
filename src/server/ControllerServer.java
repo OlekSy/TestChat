@@ -3,12 +3,10 @@ package server;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 
-import java.io.*;
-
 public class ControllerServer {
     @FXML TextArea serverOutput;
 
-    public void initialize() throws IOException{
+    public void initialize(){
         serverOutput.setEditable(false);
     }
 
