@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="client.ControllerClient">
+  <children>
+    <TextArea fx:id="clientOutput" layoutX="24.0" layoutY="26.0" prefHeight="274.0" prefWidth="553.0" wrapText="true" />
+    <TextField fx:id="clientInput" layoutX="24.0" layoutY="320.0" prefWidth="482.0" />
+    <Button fx:id="btnSend" layoutX="521.0" layoutY="320.0" mnemonicParsing="false" onAction="#send" prefWidth="56.0" text="Send" />
+  </children>
+</AnchorPane>
