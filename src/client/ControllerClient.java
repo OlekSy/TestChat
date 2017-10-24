@@ -13,15 +13,18 @@ public class ControllerClient {
     @FXML TextField clientInput;
     @FXML Button btnSend;
 
-     BufferedReader in;
+    BufferedReader in;
     PrintWriter out;
 
     public void initialize(){
         clientOutput.setEditable(false);
+        clientOutput.setText("Welcome to chat!");
     }
 
     public void send(){
         out.println(clientInput.getText());
+        clientInput.clear();
+//        clientOutput.appendText("\n" + Thread.currentThread().getName());
     }
 
     public void receive(String message){

@@ -15,6 +15,7 @@ public class ClientSocketPart extends Thread{
 
     public ClientSocketPart(ControllerClient controllerClient){
         this.controllerClient = controllerClient;
+        setDaemon(true);
     }
 
     @Override
@@ -25,30 +26,29 @@ public class ClientSocketPart extends Thread{
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
-        controllerClient.receive("address = " + address);
+//        controllerClient.receive("address = " + address);
         Socket socket;
         try {
             socket = new Socket(address, 8080);
-//            try {
-                controllerClient.receive("socket = " + socket);
-                in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
-                controllerClient.setIn(in);
-                controllerClient.setOut(out);
-//                for(int i = 0; i < 10; i++){
-//                    out.println("message " + i);
-//                    controllerClient.recieve(in.readLine());
-//                }
-//            } finally {
-//                controllerClient.recieve("Closing...");
-//                socket.close();
-//            }
+//            controllerClient.receive("socket = " + socket);
+            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
+            controllerClient.setIn(in);
+            controllerClient.setOut(out);
+            try {
+                while (true) {
+                    controllerClient.receive(in.readLine());
+                }
+            } finally {
+                socket.close();
+                try {
+                    Thread.currentThread().join();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
-//    public void send(String message){
-//        out.println(message);
-//    }
 }

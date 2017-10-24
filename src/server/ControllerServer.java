@@ -8,6 +8,7 @@ public class ControllerServer {
 
     public void initialize(){
         serverOutput.setEditable(false);
+        serverOutput.setText("System information:");
     }
 
     public void consoleServerOutput(String text){
