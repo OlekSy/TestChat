@@ -26,7 +26,7 @@ public class ServerSocketPart extends Thread {
 //            controller.consoleServerOutput("Started: " + serverSocket);
             try {
                 Socket socket = serverSocket.accept();
-                try {
+//                try {
 //                    controller.consoleServerOutput("Connection accepted: " + socket);
                     BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                     PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
@@ -36,11 +36,15 @@ public class ServerSocketPart extends Thread {
 //                        if (str.equals("END")) break;
                         controller.consoleServerOutput("Echoing: " + str);
                         out.println(str);
+                        if(socket.getInputStream().read() == -1){
+                            socket.close();
+                            break;
+                        }
                     }
-                } finally {
+//                } finally {
 //                    controller.consoleServerOutput("Closing...");
-                    socket.close();
-                }
+//                    socket.close();
+//                }
             } finally {
                 serverSocket.close();
                 try {
