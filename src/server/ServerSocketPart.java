@@ -16,6 +16,7 @@ public class ServerSocketPart extends Thread {
 
     public ServerSocketPart(ControllerServer controller) throws IOException{
         this.controller = controller;
+        this.setDaemon(true);
     }
 
     @Override

@@ -41,11 +41,6 @@ public class ClientSocketPart extends Thread{
                 }
             } finally {
                 socket.close();
-                try {
-                    Thread.currentThread().join();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
             }
         } catch (IOException e) {
             e.printStackTrace();
