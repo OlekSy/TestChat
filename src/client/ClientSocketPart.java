@@ -26,11 +26,10 @@ public class ClientSocketPart extends Thread{
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
-//        controllerClient.receive("address = " + address);
         Socket socket;
         try {
             socket = new Socket(address, 8080);
-//            controllerClient.receive("socket = " + socket);
+
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
             controllerClient.setIn(in);

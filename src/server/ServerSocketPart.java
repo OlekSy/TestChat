@@ -1,16 +1,17 @@
 package server;
 
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
-
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by damaz on 22.10.2017.
  */
 public class ServerSocketPart extends Thread {
     ControllerServer controller;
+    List<MonoThreadClientHandler> clients;
 
     public static final int PORT = 8080;
 
@@ -21,41 +22,32 @@ public class ServerSocketPart extends Thread {
 
     @Override
     public void run(){
+        MonoThreadClientHandler temp;
         ServerSocket serverSocket;
+        clients = new ArrayList<>();
         try {
             serverSocket = new ServerSocket(PORT);
-//            controller.consoleServerOutput("Started: " + serverSocket);
+//            controller.consoleServerOutput("Server socket created.");
             try {
-                Socket socket = serverSocket.accept();
-//                try {
-//                    controller.consoleServerOutput("Connection accepted: " + socket);
-                    BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                    PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
-                    String str;
-                    while (true) {
-                        str = in.readLine();
-//                        if (str.equals("END")) break;
-                        controller.consoleServerOutput("Echoing: " + str);
-                        out.println(str);
-                        if(socket.getInputStream().read() == -1){
-                            socket.close();
-                            break;
-                        }
-                    }
-//                } finally {
-//                    controller.consoleServerOutput("Closing...");
-//                    socket.close();
-//                }
+                while (true) {
+                    Socket socket = serverSocket.accept();
+//                    controller.consoleServerOutput("Client Socket created.");
+                    temp = new MonoThreadClientHandler(socket, controller, this);
+                    clients.add(temp);
+                    temp.start();
+//                    controller.consoleServerOutput("Client Thread created.");
+                }
             } finally {
                 serverSocket.close();
-                try {
-                    Thread.currentThread().join();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
             }
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void send(String message){
+        for(MonoThreadClientHandler temp : clients){
+            temp.getOut().println(message);
         }
     }
 }
